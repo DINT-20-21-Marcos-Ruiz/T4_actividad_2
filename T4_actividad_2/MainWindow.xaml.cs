@@ -27,35 +27,43 @@ namespace T4_actividad_2
         public MainWindow()
         {
             InitializeComponent();
-            //superheroe_Grid.DataContext = Superheroe.GetSamples();   
+            //VER SUPER HEROE
+            superheroe_Grid.DataContext = lista[posicion];
             totalPag_TextBlock.Text = Convert.ToString(Superheroe.GetSamples().Count);
             pagActual_TextBlock.Text = "1";
+
+            //PESTAÑA NUEVO SUPER HEROES
+            superheroe = new Superheroe();
+            superheroe.Heroe = true;
+            newHeroe_Grid.DataContext = superheroe;
         }
 
         public void Limpiar_Click(object sender, RoutedEventArgs e)
         {
-            nombreHero_textBox.Clear();
-            imagenHero_textBox.Clear();
-            heroe_RadioButton.IsChecked = true;
-            villano_RadioButton.IsChecked = false;
-            vengadores_CheckBox.IsChecked = false;
-            xmen_CheckBox.IsChecked = false;
+            Superheroe superheroeTemporal = (Superheroe)newHeroe_Grid.DataContext;
+            superheroeTemporal.Nombre = "";
+            superheroeTemporal.Imagen = "";
+            superheroeTemporal.Vengador = false;
+            superheroeTemporal.Villano = false;
+            superheroeTemporal.Xmen = false;
+            superheroeTemporal.Heroe = true;
 
         }
  
         public void Aceptar_Click(object sender, RoutedEventArgs e)
         {
-            superheroe = new Superheroe(nombreHero_textBox.Text, imagenHero_textBox.Text, vengadores_CheckBox.IsChecked.Value, xmen_CheckBox.IsChecked.Value, heroe_RadioButton.IsChecked.Value, villano_RadioButton.IsChecked.Value);
-            Superheroe.GetSamples().Add(superheroe);
+            lista.Add(superheroe);
             contador = Convert.ToInt32(totalPag_TextBlock.Text) + 1;
             totalPag_TextBlock.Text = Convert.ToString(contador);
-
+            superheroe = new Superheroe();
+            superheroe.Heroe = true;
+            newHeroe_Grid.DataContext = superheroe;
         }
         public void Avanzar_MouseUp(object sender, MouseEventArgs e)
         {
-            if (posicion+1 < Superheroe.GetSamples().Count) {
+            if (posicion+1 < lista.Count()) {
                 posicion += 1;
-                superheroe_Grid.DataContext = Superheroe.GetSamples()[posicion];
+                superheroe_Grid.DataContext = lista[posicion];
                 pagActual_TextBlock.Text = Convert.ToString(posicion+1);
             }      
         }
@@ -63,7 +71,7 @@ namespace T4_actividad_2
         {
             if (posicion > 0) {
                 posicion -= 1;
-                superheroe_Grid.DataContext = Superheroe.GetSamples()[posicion];
+                superheroe_Grid.DataContext = lista[posicion];
                 pagActual_TextBlock.Text = Convert.ToString(posicion+1);
             } 
         }

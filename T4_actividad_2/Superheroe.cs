@@ -86,6 +86,11 @@ namespace T4_actividad_2
                 {
                     _villano = value;
                     NotifyPropertyChanged("Villano");
+                    if((Boolean)value == true)
+                    {
+                        Xmen = false;
+                        Vengador = false;
+                    }
                 }
             }
         }

@@ -7,7 +7,9 @@
         mc:Ignorable="d"
         Title="Superhéroes" Height="690" MinHeight="690"  Width="1000" MinWidth="1000" Icon="shield.ico">
     <Window.Resources>
-        <local:Superheroe x:Key="superheroe" Nombre="Ironman" Imagen="https://sm.ign.com/ign_latam/screenshot/default/ybbpqktez5whedr0-1592031889_31aa.jpg" Vengador="True" Xmen="False" Heroe="True" Villano="False"></local:Superheroe>
+        <local:VisibilityConversor x:Key="visibilityconversor"></local:VisibilityConversor>
+        <local:FondoConverter x:Key="fondoconverter"></local:FondoConverter>
+        <local:Superheroe x:Key="superheroe" ></local:Superheroe>
         <Style TargetType="TabItem">
             <Setter Property="FontSize" Value="15"/>
         </Style>
@@ -34,6 +36,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <!-- LOS TRIGERS QUE HICE QUE NO SON PARA ESTE EJERCICIO     
         <Style TargetType="Image" x:Key="vengadores_Trigger">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Path=Vengador}" Value="True">
@@ -57,13 +60,15 @@
                     <Setter Property="Background" Value="IndianRed"/>
                 </DataTrigger>
             </Style.Triggers>
-        </Style>
+        </Style> -->
+        
     </Window.Resources>
     
     <Grid Background="AliceBlue">
         <TabControl Margin="10">
             <TabItem Header="Ver superhéroes">
-                <Grid x:Name="superheroe_Grid" Style="{StaticResource grid_Trigger}" DataContext="{StaticResource superheroe}">
+                <Grid x:Name="superheroe_Grid" 
+                      Background="{Binding Path=Heroe,Converter={StaticResource fondoconverter}}" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60"></RowDefinition>
                         <RowDefinition Height="*"></RowDefinition>
@@ -79,10 +84,12 @@
                                 <DropShadowEffect/>
                             </TextBlock.Effect>
                         </TextBlock>
-                        <Image x:Name="xmen_Image"  DockPanel.Dock="Right" Margin="10,0,0,0"
-                               Style="{StaticResource xmen_Trigger}"/>
+                        <Image x:Name="xmen_Image"   DockPanel.Dock="Right" Margin="10,0,0,0"
+                               Source="Resources/xmen.png"
+                               Visibility="{Binding Path=Xmen,Converter={StaticResource visibilityconversor}}"/>
                         <Image x:Name="avengers_Image" DockPanel.Dock="Right" 
-                               Style="{StaticResource vengadores_Trigger}" />
+                               Source="Resources/avengers.png" 
+                               Visibility="{Binding Path=Vengador,Converter={StaticResource visibilityconversor}}"/>
                     </DockPanel>
                     <Image Grid.Row="1" Source="{Binding Path=Imagen}" Stretch="UniformToFill" Margin="10"/>
                     <StackPanel Margin="10,0,10,5" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" >
@@ -105,7 +112,7 @@
             </TabItem>
             
             <TabItem Header="Nuevo superhéroe">
-                <Grid Margin="10">
+                <Grid Margin="10" x:Name="newHeroe_Grid" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="60"></RowDefinition>
                         <RowDefinition Height="50"></RowDefinition>
@@ -114,35 +121,37 @@
                         <RowDefinition Height="*"></RowDefinition>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition ></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <TextBlock>Nombre del superhéroe</TextBlock>
                             <Image Style="{StaticResource info_Image_Style}" ToolTip="Nombre del superhéroe en inglés"></Image>
                         </StackPanel>
-                        <TextBox x:Name="nombreHero_textBox"></TextBox>
+                        <TextBox x:Name="nombreHero_textBox" Text="{Binding Path=Nombre}" ></TextBox>
                     </StackPanel>
                     <StackPanel Grid.Row="1">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock>Imagen</TextBlock>
                             <Image Style="{StaticResource info_Image_Style}" ToolTip="Imagen del superhéroe en formato comic"></Image>
                         </StackPanel>
-                        <TextBox x:Name="imagenHero_textBox"></TextBox>
+                        <TextBox x:Name="imagenHero_textBox" Text="{Binding Path=Imagen}"></TextBox>
                     </StackPanel>
                     <DockPanel Grid.Row="2" LastChildFill="False" Margin="0,10,0,10">
                         <Border Style="{StaticResource form_Border_Style}"  DockPanel.Dock="Left">
                             <StackPanel VerticalAlignment="Center" Margin="5">
-                                <RadioButton x:Name="heroe_RadioButton" IsChecked="True" VerticalContentAlignment="Center">Héroe</RadioButton>
-                                <RadioButton x:Name="villano_RadioButton" VerticalContentAlignment="Center">Villano</RadioButton>
+                                <RadioButton x:Name="heroe_RadioButton" VerticalContentAlignment="Center" IsChecked="{Binding Path=Heroe}">Héroe</RadioButton>
+                                <RadioButton x:Name="villano_RadioButton" VerticalContentAlignment="Center" IsChecked="{Binding Path=Villano}">Villano</RadioButton>
                             </StackPanel>
                         </Border>
                         <Border Style="{StaticResource form_Border_Style}" DockPanel.Dock="Right">
                             <StackPanel VerticalAlignment="Center" Margin="5">
                                 <CheckBox x:Name="vengadores_CheckBox" VerticalContentAlignment="Center" 
+                                          IsChecked="{Binding Path=Vengador}"
                                           IsEnabled="{Binding ElementName=heroe_RadioButton,Path=IsChecked}">Vengadores</CheckBox>
                                 <CheckBox x:Name="xmen_CheckBox" VerticalContentAlignment="Center"
+                                          IsChecked="{Binding Path=Xmen}"
                                           IsEnabled="{Binding ElementName=heroe_RadioButton,Path=IsChecked}">X-men</CheckBox>
                             </StackPanel>
                         </Border>
