@@ -58,6 +58,7 @@ namespace T4_actividad_2
             superheroe = new Superheroe();
             superheroe.Heroe = true;
             newHeroe_Grid.DataContext = superheroe;
+            MessageBox.Show("Superhéroe insertado con exito","Superhéroes",MessageBoxButton.OK,MessageBoxImage.Information);
         }
         public void Avanzar_MouseUp(object sender, MouseEventArgs e)
         {
